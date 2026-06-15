@@ -19,13 +19,12 @@
 
 啟動 LightRAG Server 時，請確保工作目錄為 repo 根目錄，這樣相對路徑才會正確解析。
 
-### 3. MiniMax model ID 待確認
+### 3. MiniMax model ID
 
-`.env.example` 中的 `LLM_MODEL` / `KEYWORD_LLM_MODEL` / `QUERY_LLM_MODEL` 維持佔位符 `<your-minimax-model-id>`，`LLM_BINDING_API_KEY` 維持佔位符 `YOUR_MINIMAX_API_KEY`。使用者需自行：
+使用者已確認 model ID 為 `Minimax-M2.5`，已填入 `.env.example` 的 `LLM_MODEL` / `KEYWORD_LLM_MODEL` / `QUERY_LLM_MODEL`。`LLM_BINDING_API_KEY` 維持佔位符 `YOUR_MINIMAX_API_KEY`（不寫入真實 key）。使用者需自行：
 
-1. 登入 MiniMax 控制台確認可用的 model ID 與 API host。
-2. 複製 `.env.example` 為 `.env`（`.env` 已加入 `.gitignore`，不會被提交）。
-3. 填入實際的 API key 與 model ID。
+1. 複製 `.env.example` 為 `.env`（`.env` 已加入 `.gitignore`，不會被提交）。
+2. 填入實際的 API key；若控制台顯示的 API host 與 `https://api.minimax.io/v1` 不同（例如中國站網域），一併更新 `LLM_BINDING_HOST`。
 
 ### 4. Ollama / LightRAG 尚未安裝
 
