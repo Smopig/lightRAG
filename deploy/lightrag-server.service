@@ -1,0 +1,60 @@
+# lightrag-server.service
+#
+# User-level systemd unit 範本。
+#
+# 安裝方式：
+#   mkdir -p ~/.config/systemd/user
+#   cp deploy/lightrag-server.service ~/.config/systemd/user/
+#   # !! 編輯下方 WorkingDirectory 與 EnvironmentFile 為「絕對路徑」 !!
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now lightrag-server.service
+#   systemctl --user status lightrag-server.service
+#   journalctl --user -u lightrag-server.service -f
+#
+# 若需要登出後仍持續運作，需另行執行（系統層設定，需使用者確認）：
+#   loginctl enable-linger <your-username>
+#
+# ---------------------------------------------------------------------------
+# macOS 對應做法（launchd）：
+#   - 沒有 EnvironmentFile 這種「直接讀 .env」的機制，需用一個 wrapper script
+#     （例如 deploy/run_lightrag_server.sh）內容大致為：
+#       #!/usr/bin/env bash
+#       set -euo pipefail
+#       cd /absolute/path/to/lightRAG
+#       set -a; source .env; set +a
+#       exec lightrag-server
+#   - 建立 ~/Library/LaunchAgents/com.lightrag.server.plist，
+#     ProgramArguments 指向上述 wrapper script，
+#     RunAtLoad / KeepAlive 對應 systemd 的 enable / Restart。
+#   - 載入：launchctl load ~/Library/LaunchAgents/com.lightrag.server.plist
+#   - 日誌：StandardOutPath / StandardErrorPath 指定到檔案，再用 tail -f 查看。
+# ---------------------------------------------------------------------------
+
+[Unit]
+Description=LightRAG Server (user service)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+
+# !! 請改成本機絕對路徑，例如 /home/youruser/lightRAG !!
+# %h 在 user unit 中會展開為使用者家目錄，若 repo 不在 $HOME 下請改成絕對路徑。
+WorkingDirectory=%h/lightRAG
+
+# .env 內含 API key 等機密，請確保權限為 600，且不要把 .env 提交到 git。
+EnvironmentFile=%h/lightRAG/.env
+
+# 依目前安裝方式調整 ExecStart（例如改成 uv run lightrag-server，
+# 或指定 .venv 內的執行檔絕對路徑）。
+ExecStart=lightrag-server
+
+Restart=on-failure
+RestartSec=5
+
+# 標準輸出導向 systemd journal，可用 journalctl --user -u lightrag-server.service 查看
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

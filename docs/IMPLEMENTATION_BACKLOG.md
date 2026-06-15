@@ -61,8 +61,8 @@
 
 ## P7 — 進階補強
 
-- [ ] 建立 golden question set。
-- [ ] 建立備份與還原 SOP。
-- [ ] 評估 PostgreSQL。
-- [ ] 評估 Rerank。
-- [ ] 評估 MCP 化。
+- [x] 建立 golden question set。（見 scripts/golden_questions.yml、scripts/golden_check.py）
+- [x] 建立備份與還原 SOP。（見 docs/V1.2_ADVANCED_OPERATIONS.md、scripts/backup_lab.sh、scripts/restore_lab.sh）
+- [x] 評估 PostgreSQL。（見 docs/V1.2_ADVANCED_OPERATIONS.md）
+- [x] 評估 Rerank。（見 docs/V1.2_ADVANCED_OPERATIONS.md）
+- [x] 評估 MCP 化。（見 docs/V1.2_ADVANCED_OPERATIONS.md）

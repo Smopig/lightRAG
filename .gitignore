@@ -1,0 +1,7 @@
+.env
+lightrag_workspace/
+__pycache__/
+.venv/
+*.log
+outputs/
+.DS_Store

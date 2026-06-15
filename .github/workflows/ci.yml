@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: 測試與檢查
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 程式碼
+        uses: actions/checkout@v5
+
+      - name: 設定 Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: 安裝測試依賴
+        run: pip install pytest requests pyyaml python-frontmatter
+
+      - name: 編譯檢查 Python 腳本
+        run: python -m py_compile scripts/*.py
+
+      - name: 語法檢查 shell 腳本
+        run: |
+          for f in scripts/*.sh; do
+            echo "Checking $f"
+            bash -n "$f"
+          done
+
+      - name: 執行離線測試
+        run: pytest tests/ -v
+
+      - name: 安裝 ruff
+        run: pip install ruff
+
+      - name: Ruff lint 檢查
+        run: ruff check scripts/ tests/
+
+      # 改用 gitleaks 取代簡易 sk- grep：
+      # MiniMax 等服務的金鑰格式不是 sk- 開頭，純 grep sk- 會漏掃。
+      - name: 掃描敏感資訊 (gitleaks)
+        run: |
+          docker run --rm -v "$PWD:/path" zricethezav/gitleaks:latest \
+            detect --no-git --source /path --redact \
+            --config /path/.gitleaks.toml
+
+      - name: Wiki Lint 檢查
+        run: |
+          OUTPUT=$(python scripts/wiki_lint.py)
+          echo "$OUTPUT"
+          if echo "$OUTPUT" | grep -q "verified page without citations"; then
+            echo "Found verified page without citations"
+            exit 1
+          fi
