@@ -1,0 +1,7 @@
+required_sections:
+  - Sources
+verified_requires_citations: true
+wikilink_style: full_path
+allow_orphan_pages:
+  - index.md
+  - log.md

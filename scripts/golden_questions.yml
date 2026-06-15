@@ -1,0 +1,8 @@
+- title: LightRAG 整體架構
+  question: 請說明 LightRAG 的整體架構，包含主要元件與資料流。
+
+- title: LightRAG 的索引與檢索流程
+  question: LightRAG 如何進行 chunk、embedding、entity/relation 抽取與圖譜建立？
+
+- title: LightRAG 查詢模式比較
+  question: LightRAG 支援哪些查詢模式（如 local/global/hybrid/mix），各自的差異與適用情境是什麼？
