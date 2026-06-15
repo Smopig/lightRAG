@@ -1,5 +1,6 @@
-from pathlib import Path
 import json
+from pathlib import Path
+
 from query_lightrag import query_lightrag
 
 ROOT = Path(__file__).resolve().parents[1]

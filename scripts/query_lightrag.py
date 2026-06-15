@@ -1,5 +1,6 @@
-import os
 import json
+import os
+
 import requests
 
 BASE_URL = os.getenv("LIGHTRAG_URL", "http://localhost:9621")
