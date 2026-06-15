@@ -1,20 +1,50 @@
 - title: LightRAG 整體架構
   question: 請說明 LightRAG 的整體架構，包含主要元件與資料流。
+  expected_keywords:
+    - chunk
+    - entity
+    - 向量
+    - 圖譜
 
 - title: LightRAG 的索引與檢索流程
   question: LightRAG 如何進行 chunk、embedding、entity/relation 抽取與圖譜建立？
+  expected_keywords:
+    - chunk
+    - embedding
+    - entity
+    - relation
 
 - title: LightRAG 查詢模式比較
   question: LightRAG 支援哪些查詢模式（如 local/global/hybrid/mix），各自的差異與適用情境是什麼？
+  expected_keywords:
+    - local
+    - global
+    - hybrid
+    - mix
 
 - title: LightRAG 儲存層設計
   question: LightRAG 預設使用哪些儲存後端（KV store、向量資料庫、圖資料庫），各自存放什麼資料？
+  expected_keywords:
+    - KV
+    - 向量
+    - 圖
+    - storage
 
 - title: Entity 與 Relation 抽取結果
   question: 請列出目前知識庫中與系統架構相關的主要 entity，以及它們之間的 relation。
+  expected_keywords:
+    - entity
+    - relation
 
 - title: References 完整性檢查
   question: 針對「LightRAG 整體架構」這個主題，回答時引用了哪些原始文件來源（references）？這些來源是否都能對應到 raw_sources 中的實際檔案？
+  expected_keywords:
+    - reference
+    - raw_sources
 
 - title: Wiki 編譯流程與驗證
   question: 從 LightRAG 查詢結果到產生 wiki 頁面的編譯流程是什麼？編譯後的頁面如何標示來源以便驗證？
+  expected_keywords:
+    - wiki
+    - Sources
+    - 來源

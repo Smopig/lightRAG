@@ -13,3 +13,9 @@ type: log
 - PostgreSQL / Rerank 第一版不採用；MCP 化列為下一階段第一任務（詳見 docs/V1.2_ADVANCED_OPERATIONS.md）。
 - 驗證：pytest 23 passed、wiki_lint 0 problems、smoke_test PASS=5/FAIL=0/SKIP=5、CI success。
 - 保留：真實 server 端到端驗收需於本機執行 setup_env.sh + smoke_test.sh。
+
+## [2026-06-15] improve | 依審查補強三項弱點（PR #1）
+- 新增 scripts/ingest_sources.py：補上 raw_sources → LightRAG 的匯入工具（dry-run token 估算 + --execute 上傳 + 批量上限）。注意：上傳端點/payload 仍需實機 LightRAG 版本驗證後調整。
+- 升級 scripts/golden_check.py：支援 expected_keywords 關鍵詞命中比對（PASS/WARN/FAIL），不再只看「有無回應」。golden_questions.yml 補上各題關鍵詞。
+- 強化 CI：以 gitleaks 取代只抓 sk- 的簡易掃描（MiniMax 金鑰非 sk- 格式）；新增 ruff lint（E/F/I，line-length 120）並修正既有 10 個 lint 問題。
+- 驗證：ruff clean、pytest 49 passed、wiki_lint 0 problems。

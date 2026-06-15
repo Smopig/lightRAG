@@ -39,3 +39,13 @@
 ### 5. 新增的 golden check
 
 新增 `scripts/golden_check.py` 與 `scripts/golden_questions.yml`，用於對一組「黃金問題」呼叫 `query_lightrag`，檢查回應是否含 `references`，並輸出 PASS/FAIL 摘要。可在 LightRAG Server 啟動並完成 ingest 後執行，作為基本的健全度檢查（smoke test）。
+
+### 6. 審查後補強（2026-06-15）
+
+依主控審查提出的弱點，補強三項：
+
+- **`scripts/ingest_sources.py`**：補上 `raw_sources/` → LightRAG 的匯入工具。預設 dry-run，列出檔案數與粗略 token 估算；`--execute` 才實際上傳，含 `--batch-size` / `--max-files` 保護。**待驗證**：上傳端點預設 `/documents/upload`（multipart），實際端點與 payload 須以實機 LightRAG 的 `/docs` 或 `openapi.json` 確認後調整（已於檔頭註解標註）。
+- **`scripts/golden_check.py` 升級**：`golden_questions.yml` 每題可帶 `expected_keywords`，檢查回應是否命中關鍵詞（命中率低於門檻 → WARN），能抓「答得不對」而非只抓「沒回應」。向後相容：無關鍵詞的題目行為等同舊版。
+- **CI 強化**：以 `gitleaks`（搭配 `.gitleaks.toml` 白名單放行 `.env.example` 佔位符）取代只抓 `sk-` 的簡易掃描，因 MiniMax 金鑰非 `sk-` 格式；新增 `ruff` lint（`pyproject.toml`，規則 E/F/I、line-length 120）。
+
+驗證：`ruff check` 全通過、`pytest` 49 passed、`wiki_lint` 0 problems。

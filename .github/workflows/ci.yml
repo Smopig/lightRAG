@@ -33,16 +33,19 @@ jobs:
       - name: 執行離線測試
         run: pytest tests/ -v
 
-      - name: 掃描敏感資訊
+      - name: 安裝 ruff
+        run: pip install ruff
+
+      - name: Ruff lint 檢查
+        run: ruff check scripts/ tests/
+
+      # 改用 gitleaks 取代簡易 sk- grep：
+      # MiniMax 等服務的金鑰格式不是 sk- 開頭，純 grep sk- 會漏掃。
+      - name: 掃描敏感資訊 (gitleaks)
         run: |
-          if grep -REn 'sk-[A-Za-z0-9]{10,}' \
-            --exclude-dir=.git \
-            --exclude-dir=node_modules \
-            --exclude-dir=.venv . 2>/dev/null; then
-            echo "Found possible secret key matching sk- pattern"
-            exit 1
-          fi
-          echo "No obvious secret keys found"
+          docker run --rm -v "$PWD:/path" zricethezav/gitleaks:latest \
+            detect --no-git --source /path --redact \
+            --config /path/.gitleaks.toml
 
       - name: Wiki Lint 檢查
         run: |

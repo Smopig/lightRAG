@@ -1,8 +1,9 @@
+import json
 import re
 import sys
-import json
-from pathlib import Path
 from datetime import date
+from pathlib import Path
+
 from query_lightrag import query_lightrag
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -71,7 +72,12 @@ related: []
 """
     out.write_text(md, encoding="utf-8")
     with (WIKI / "log.md").open("a", encoding="utf-8") as f:
-        f.write(f"\n## [{date.today().isoformat()}] compile | {title}\n- Question: {question}\n- Output: {out.relative_to(WIKI)}\n")
+        log_entry = (
+            f"\n## [{date.today().isoformat()}] compile | {title}\n"
+            f"- Question: {question}\n"
+            f"- Output: {out.relative_to(WIKI)}\n"
+        )
+        f.write(log_entry)
     print(out)
 
 

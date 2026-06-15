@@ -6,7 +6,6 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 import compile_wiki_page as cwp  # noqa: E402
 
-
 # ---------- slugify ----------
 
 def test_slugify_basic_ascii():

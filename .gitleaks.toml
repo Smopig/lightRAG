@@ -1,0 +1,9 @@
+title = "gitleaks config for lightRAG"
+
+# 預設規則照常套用，僅針對 .env.example 內的佔位符做白名單，
+# 避免 YOUR_MINIMAX_API_KEY / Minimax-M2.5 等非真實金鑰被誤判。
+[allowlist]
+  description = "Allow placeholder values in .env.example"
+  paths = [
+    '''\.env\.example$''',
+  ]
