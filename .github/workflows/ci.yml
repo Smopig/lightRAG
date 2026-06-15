@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: 測試與檢查
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 程式碼
+        uses: actions/checkout@v4
+
+      - name: 設定 Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 安裝測試依賴
+        run: pip install pytest requests pyyaml python-frontmatter
+
+      - name: 編譯檢查 Python 腳本
+        run: python -m py_compile scripts/*.py
+
+      - name: 語法檢查 shell 腳本
+        run: |
+          for f in scripts/*.sh; do
+            echo "Checking $f"
+            bash -n "$f"
+          done
+
+      - name: 執行離線測試
+        run: pytest tests/ -v
+
+      - name: 掃描敏感資訊
+        run: |
+          if grep -REn 'sk-[A-Za-z0-9]{10,}' \
+            --exclude-dir=.git \
+            --exclude-dir=node_modules \
+            --exclude-dir=.venv . 2>/dev/null; then
+            echo "Found possible secret key matching sk- pattern"
+            exit 1
+          fi
+          echo "No obvious secret keys found"
+
+      - name: Wiki Lint 檢查
+        run: |
+          OUTPUT=$(python scripts/wiki_lint.py)
+          echo "$OUTPUT"
+          if echo "$OUTPUT" | grep -q "verified page without citations"; then
+            echo "Found verified page without citations"
+            exit 1
+          fi
