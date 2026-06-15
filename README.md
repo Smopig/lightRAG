@@ -62,6 +62,26 @@ python3 scripts/route_query.py "LightRAG 整體架構是什麼？"
 python3 scripts/golden_check.py
 ```
 
+## 安裝與測試
+
+提供兩支輔助腳本，協助環境安裝與驗收：
+
+```bash
+# 1. 安裝環境（冪等：已安裝的項目會自動 skip）
+#    檢查/提示安裝 uv、ollama，下載 bge-m3，建立 .venv 並安裝相依套件，
+#    若無 .env 則從 .env.example 複製
+bash scripts/setup_env.sh
+
+# 2. 端到端 smoke test（對應 docs/ACCEPTANCE_CHECKLIST.md）
+#    檢查工具版本、.env.example 安全性、LightRAG 健康檢查、
+#    wiki_lint，以及（若 server 已啟動）查詢與 wiki 編譯示範
+bash scripts/smoke_test.sh
+```
+
+每個檢查項目會標示 `[PASS]` / `[SKIP]` / `[FAIL]`，並在結尾印出總結。
+LightRAG server 未啟動時，相關項目會標示 `[SKIP]` 並印出提示，不會中止整支腳本；
+只有 `wiki_lint.py` 真正失敗時，`smoke_test.sh` 才會回傳非零的 exit code。
+
 ## Lint 檢查
 
 ```bash
